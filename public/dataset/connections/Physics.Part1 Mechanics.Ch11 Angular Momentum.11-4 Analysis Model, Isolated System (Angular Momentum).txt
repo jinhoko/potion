@@ -1,0 +1,2 @@
+Physics.Part1 Mechanics.Ch11 Angular Momentum.11-3 Angular Momentum of a Rotating Rigid Object
+Physics.Part1 Mechanics.Ch11 Angular Momentum.11-5 The Motion of Gyroscopes and Tops

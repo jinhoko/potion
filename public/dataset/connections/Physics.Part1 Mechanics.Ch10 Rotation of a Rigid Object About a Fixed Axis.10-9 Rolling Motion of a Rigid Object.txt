@@ -1,0 +1,3 @@
+Physics.Part1 Mechanics.Ch05 The Laws of Motion.5-8 Forces of Friction
+Physics.Part1 Mechanics.Ch10 Rotation of a Rigid Object About a Fixed Axis.10-7 Rotational Kinetic Energy
+Physics.Part1 Mechanics.Ch10 Rotation of a Rigid Object About a Fixed Axis.10-8 Energy Considerations in Rotational Motion

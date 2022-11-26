@@ -1,0 +1,25 @@
+{
+  "name": "test",
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "start": "node ./bin/www"
+  },
+  "dependencies": {
+    "bootstrap": "^4.3.1",
+    "cookie-parser": "~1.4.4",
+    "debug": "~2.6.9",
+    "express": "~4.16.1",
+    "glyphicons": "^0.2.0",
+    "morgan": "~1.9.1",
+    "pagedown": "^1.1.0",
+    "python-shell": "^1.0.8",
+    "showdown": "^1.9.1",
+    "simplemde": "^1.11.2",
+    "twitter": "^1.7.1"
+  },
+  "main": [
+    "dist/bootstrap-treeview.min.js",
+    "dist/bootstrap-treeview.min.css"
+  ]
+}

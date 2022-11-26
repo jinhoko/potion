@@ -1,0 +1,8 @@
+Physics.Part1 Mechanics.Ch03 Vectors.3-2 Vector and Scalar Quantities
+Physics.Part1 Mechanics.Ch05 The Laws of Motion.5-4 Newton¡¯s Second Law
+Physics.Part1 Mechanics.Ch05 The Laws of Motion.5-8 Forces of Friction
+Physics.Part1 Mechanics.Ch06 Circular Motion and Other Applications of Newton¡¯s Laws.6-4 Motion in the Presence of Resistive Forces
+Physics.Part1 Mechanics.Ch07 Energy of a System.7-2 Work Done by a Constant Force
+Physics.Part1 Mechanics.Ch10 Rotation of a Rigid Object About a Fixed Axis.10-4 Torque
+Physics.Part1 Mechanics.Ch12 Static Equilibrium and Elasticity.12-1 Analysis Model, Rigid Object in Equilibrium
+Physics.Part1 Mechanics.Ch13 Universal Gravitation.13-2 Free-Fall Acceleration and the Gravitational Force

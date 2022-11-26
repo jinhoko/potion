@@ -1,0 +1,2 @@
+Physics.Part1 Mechanics.Ch07 Energy of a System.7-4 Work Done by a Varying Force
+Physics.Part1 Mechanics.Ch10 Rotation of a Rigid Object About a Fixed Axis.10-7 Rotational Kinetic Energy

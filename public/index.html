@@ -1,0 +1,338 @@
+<html>
+
+<head>
+  <title>Potion</title>
+  <link rel="stylesheet" href="stylesheets/style.css">
+  <link href="./bower_components/bootstrap/dist/css/bootstrap.css" rel="stylesheet">
+  <link rel="stylesheet" href="bootstrap.min.css">
+  <script src="//code.jquery.com/jquery.min.js"></script>
+  <link rel="stylesheet" href="bootstrap-treeview.css">
+  <script src="bootstrap-treeview.js"></script>
+  <script>
+
+    function getQueryVariable(variable) {
+      var query = window.location.search.substring(1);
+      var vars = query.split('&');
+      for (var i = 0; i < vars.length; i++) {
+        var pair = vars[i].split('=');
+        if (decodeURIComponent(pair[0]) == variable) {
+          return decodeURIComponent(pair[1]);
+        }
+      }
+      return "";
+    }
+
+    $(function(){
+      console.log(getQueryVariable('page'));
+      var got = encodeURI(getQueryVariable('page'));
+      var got2 = encodeURI(getQueryVariable('header'));
+      console.log(got);
+      if (got.length == 0 && got2.length == 0 ) {
+        $("#includedContent").load('default.html');
+      } else if(got2.length == 0) {
+        $("#includedContent").load(got);
+      }
+      else{
+        $("#includedContent").load('graph.html');
+      }
+
+    });
+  </script>
+
+</head>
+
+<body>
+
+<div class = "sidenav">
+  <div class="titleshow">
+    <img src="images/letter.png" width="280px" >
+    <style type="text/css">
+      img {margin-bottom: 20px;}  </style>
+
+  </div>
+  <div class="menubar">
+    <div class="mbrow">
+      <div class="col-sm-4">
+        <div id="treeview3" class=""></div>
+      </div>
+    </div>
+
+    <script src="./bower_components/jquery/dist/jquery.js"></script>
+    <script src="./javascripts/bootstrap-treeview.js"></script>
+    <script type="text/javascript">
+
+      $(function() {
+
+        var jsonn = JSON.parse($.getJSON({'url': "data/menu.json", 'async': false}).responseText);
+
+        $('#treeview2').treeview({
+          levels: 1,
+          data: jsonn,
+          showIcon : true,
+          color: "#428bca"
+
+        });
+
+        $('#treeview3').treeview({
+          levels: 99,
+          data: jsonn,
+          showIcon : true,
+          expandIcon: 'glyphicon glyphicon-chevron-right',
+          collapseIcon: 'glyphicon glyphicon-chevron-down',
+          nodeIcon: 'glyphicon glyphicon-bookmark',
+          color: "#428bca",
+          onNodeSelected: function(event, data) {
+            console.log(data)
+             if(!data['isLeaf']) {
+               window.location = "index.html"
+              // $("#includedContent").load("mainpage.html");
+             } else {
+               window.location = "index.html?page="+data['path'];
+             //  $("#includedContent").load('mainpage.html');
+             }
+          }
+        });
+
+
+        $('#treeview5').treeview({
+          color: "#428bca",
+          expandIcon: 'glyphicon glyphicon-chevron-right',
+          collapseIcon: 'glyphicon glyphicon-chevron-down',
+          nodeIcon: 'glyphicon glyphicon-bookmark',
+          data: jsonn
+        });
+
+
+        var search = function(e) {
+          var pattern = $('#input-search').val();
+          var options = {
+            ignoreCase: $('#chk-ignore-case').is(':checked'),
+            exactMatch: $('#chk-exact-match').is(':checked'),
+            revealResults: $('#chk-reveal-results').is(':checked')
+          };
+          var results = $searchableTree.treeview('search', [ pattern, options ]);
+
+          var output = '<p>' + results.length + ' matches found</p>';
+          $.each(results, function (index, result) {
+            output += '<p>- ' + result.text + '</p>';
+          });
+          $('#search-output').html(output);
+        }
+
+        $('#btn-search').on('click', search);
+        $('#input-search').on('keyup', search);
+
+        $('#btn-clear-search').on('click', function (e) {
+          $searchableTree.treeview('clearSearch');
+          $('#input-search').val('');
+          $('#search-output').html('');
+        });
+
+
+        var initSelectableTree = function() {
+          return $('#treeview-selectable').treeview({
+            data: defaultData,
+            multiSelect: $('#chk-select-multi').is(':checked'),
+            onNodeSelected: function(event, node) {
+              $('#selectable-output').prepend('<p>' + node.text + ' was selected</p>');
+            },
+            onNodeUnselected: function (event, node) {
+              $('#selectable-output').prepend('<p>' + node.text + ' was unselected</p>');
+            }
+          });
+        };
+        var $selectableTree = initSelectableTree();
+
+        var findSelectableNodes = function() {
+          return $selectableTree.treeview('search', [ $('#input-select-node').val(), { ignoreCase: false, exactMatch: false } ]);
+        };
+        var selectableNodes = findSelectableNodes();
+
+        $('#chk-select-multi:checkbox').on('change', function () {
+          console.log('multi-select change');
+          $selectableTree = initSelectableTree();
+          selectableNodes = findSelectableNodes();
+        });
+
+        // Select/unselect/toggle nodes
+        $('#input-select-node').on('keyup', function (e) {
+          selectableNodes = findSelectableNodes();
+          $('.select-node').prop('disabled', !(selectableNodes.length >= 1));
+        });
+
+        $('#btn-select-node.select-node').on('click', function (e) {
+          $selectableTree.treeview('selectNode', [ selectableNodes, { silent: $('#chk-select-silent').is(':checked') }]);
+        });
+
+        $('#btn-unselect-node.select-node').on('click', function (e) {
+          $selectableTree.treeview('unselectNode', [ selectableNodes, { silent: $('#chk-select-silent').is(':checked') }]);
+        });
+
+        $('#btn-toggle-selected.select-node').on('click', function (e) {
+          $selectableTree.treeview('toggleNodeSelected', [ selectableNodes, { silent: $('#chk-select-silent').is(':checked') }]);
+        });
+
+
+
+        var $expandibleTree = $('#treeview-expandible').treeview({
+          data: defaultData,
+          onNodeCollapsed: function(event, node) {
+            $('#expandible-output').prepend('<p>' + node.text + ' was collapsed</p>');
+          },
+          onNodeExpanded: function (event, node) {
+            $('#expandible-output').prepend('<p>' + node.text + ' was expanded</p>');
+          }
+        });
+
+        var findExpandibleNodess = function() {
+          return $expandibleTree.treeview('search', [ $('#input-expand-node').val(), { ignoreCase: false, exactMatch: false } ]);
+        };
+        var expandibleNodes = findExpandibleNodess();
+
+        // Expand/collapse/toggle nodes
+        $('#input-expand-node').on('keyup', function (e) {
+          expandibleNodes = findExpandibleNodess();
+          $('.expand-node').prop('disabled', !(expandibleNodes.length >= 1));
+        });
+
+        $('#btn-expand-node.expand-node').on('click', function (e) {
+          var levels = $('#select-expand-node-levels').val();
+          $expandibleTree.treeview('expandNode', [ expandibleNodes, { levels: levels, silent: $('#chk-expand-silent').is(':checked') }]);
+        });
+
+        $('#btn-collapse-node.expand-node').on('click', function (e) {
+          $expandibleTree.treeview('collapseNode', [ expandibleNodes, { silent: $('#chk-expand-silent').is(':checked') }]);
+        });
+
+        $('#btn-toggle-expanded.expand-node').on('click', function (e) {
+          $expandibleTree.treeview('toggleNodeExpanded', [ expandibleNodes, { silent: $('#chk-expand-silent').is(':checked') }]);
+        });
+
+        // Expand/collapse all
+        $('#btn-expand-all').on('click', function (e) {
+          var levels = $('#select-expand-all-levels').val();
+          $expandibleTree.treeview('expandAll', { levels: levels, silent: $('#chk-expand-silent').is(':checked') });
+        });
+
+        $('#btn-collapse-all').on('click', function (e) {
+          $expandibleTree.treeview('collapseAll', { silent: $('#chk-expand-silent').is(':checked') });
+        });
+
+
+
+        var $checkableTree = $('#treeview-checkable').treeview({
+          data: defaultData,
+          showIcon: false,
+          showCheckbox: true,
+          onNodeChecked: function(event, node) {
+            $('#checkable-output').prepend('<p>' + node.text + ' was checked</p>');
+          },
+          onNodeUnchecked: function (event, node) {
+            $('#checkable-output').prepend('<p>' + node.text + ' was unchecked</p>');
+          }
+        });
+
+        var findCheckableNodess = function() {
+          return $checkableTree.treeview('search', [ $('#input-check-node').val(), { ignoreCase: false, exactMatch: false } ]);
+        };
+        var checkableNodes = findCheckableNodess();
+
+        // Check/uncheck/toggle nodes
+        $('#input-check-node').on('keyup', function (e) {
+          checkableNodes = findCheckableNodess();
+          $('.check-node').prop('disabled', !(checkableNodes.length >= 1));
+        });
+
+        $('#btn-check-node.check-node').on('click', function (e) {
+          $checkableTree.treeview('checkNode', [ checkableNodes, { silent: $('#chk-check-silent').is(':checked') }]);
+        });
+
+        $('#btn-uncheck-node.check-node').on('click', function (e) {
+          $checkableTree.treeview('uncheckNode', [ checkableNodes, { silent: $('#chk-check-silent').is(':checked') }]);
+        });
+
+        $('#btn-toggle-checked.check-node').on('click', function (e) {
+          $checkableTree.treeview('toggleNodeChecked', [ checkableNodes, { silent: $('#chk-check-silent').is(':checked') }]);
+        });
+
+        // Check/uncheck all
+        $('#btn-check-all').on('click', function (e) {
+          $checkableTree.treeview('checkAll', { silent: $('#chk-check-silent').is(':checked') });
+        });
+
+        $('#btn-uncheck-all').on('click', function (e) {
+          $checkableTree.treeview('uncheckAll', { silent: $('#chk-check-silent').is(':checked') });
+        });
+
+
+
+        var $disabledTree = $('#treeview-disabled').treeview({
+          data: defaultData,
+          onNodeDisabled: function(event, node) {
+            $('#disabled-output').prepend('<p>' + node.text + ' was disabled</p>');
+          },
+          onNodeEnabled: function (event, node) {
+            $('#disabled-output').prepend('<p>' + node.text + ' was enabled</p>');
+          },
+          onNodeCollapsed: function(event, node) {
+            $('#disabled-output').prepend('<p>' + node.text + ' was collapsed</p>');
+          },
+          onNodeUnchecked: function (event, node) {
+            $('#disabled-output').prepend('<p>' + node.text + ' was unchecked</p>');
+          },
+          onNodeUnselected: function (event, node) {
+            $('#disabled-output').prepend('<p>' + node.text + ' was unselected</p>');
+          }
+        });
+
+        var findDisabledNodes = function() {
+          return $disabledTree.treeview('search', [ $('#input-disable-node').val(), { ignoreCase: false, exactMatch: false } ]);
+        };
+        var disabledNodes = findDisabledNodes();
+
+        // Expand/collapse/toggle nodes
+        $('#input-disable-node').on('keyup', function (e) {
+          disabledNodes = findDisabledNodes();
+          $('.disable-node').prop('disabled', !(disabledNodes.length >= 1));
+        });
+
+        $('#btn-disable-node.disable-node').on('click', function (e) {
+          $disabledTree.treeview('disableNode', [ disabledNodes, { silent: $('#chk-disable-silent').is(':checked') }]);
+        });
+
+        $('#btn-enable-node.disable-node').on('click', function (e) {
+          $disabledTree.treeview('enableNode', [ disabledNodes, { silent: $('#chk-disable-silent').is(':checked') }]);
+        });
+
+        $('#btn-toggle-disabled.disable-node').on('click', function (e) {
+          $disabledTree.treeview('toggleNodeDisabled', [ disabledNodes, { silent: $('#chk-disable-silent').is(':checked') }]);
+        });
+
+        // Expand/collapse all
+        $('#btn-disable-all').on('click', function (e) {
+          $disabledTree.treeview('disableAll', { silent: $('#chk-disable-silent').is(':checked') });
+        });
+
+        $('#btn-enable-all').on('click', function (e) {
+          $disabledTree.treeview('enableAll', { silent: $('#chk-disable-silent').is(':checked') });
+        });
+
+
+
+        var $tree = $('#treeview12').treeview({
+          data: json
+        });
+      });
+    </script>
+  </div>
+</div>
+
+  <div class="includedContent", id="includedContent" style="margin-left: 320px">
+    <style scoped src="stylesheets/style.css">
+    </style>
+  </div>
+
+
+</body>
+
+</html>

@@ -1,0 +1,3 @@
+Physics.Part1 Mechanics.Ch11 Angular Momentum.11-3 Angular Momentum of a Rotating Rigid Object
+Physics.Part1 Mechanics.Ch13 Universal Gravitation.13-2 Free-Fall Acceleration and the Gravitational Force
+Physics.Part1 Mechanics.Ch13 Universal Gravitation.13-6 Energy Considerations in Planetary and Satellite Motion
